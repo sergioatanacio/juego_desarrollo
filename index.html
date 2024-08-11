@@ -1,0 +1,186 @@
+<h1 id="especificaci-n-de-requisitos-de-software-juego-de-duelo-2d">Especificación de Requisitos de Software: Juego de Duelo 2D</h1>
+<h2 id="1-descripci-n-general">1. Descripción General</h2>
+<p>El juego es un duelo 2D para dos jugadores, desarrollado con Canvas 2D y JavaScript. Los jugadores controlan personajes que pueden moverse, girar y disparar en un entorno con obstáculos. El objetivo es eliminar al oponente mientras se recolectan recursos.</p>
+<h2 id="2-requisitos-funcionales">2. Requisitos Funcionales</h2>
+<p>2.1 Jugabilidad</p>
+<ul>
+    <li>Dos jugadores controlan sus personajes en tiempo real.</li>
+    <li>Los personajes pueden moverse, girar 360 grados y disparar.</li>
+    <li>El juego se desarrolla en un canvas 2D.</li>
+    <li>Obstáculos aparecen aleatoriamente al inicio del juego.</li>
+    <li>Los jugadores tienen un rango de visión limitado (círculo alrededor del personaje).</li>
+</ul>
+<p>2.2 Controles</p>
+<ul>
+    <li>Jugador 1: WASD para moverse, Q para girar, E para disparar.</li>
+    <li>Jugador 2: Flechas para moverse, O para girar, P para disparar.</li>
+</ul>
+<p>2.3 Recursos</p>
+<ul>
+    <li>Cada jugador comienza con 3 vidas y 5 balas.</li>
+    <li>Vidas y balas adicionales aparecen en el mapa para ser recolectadas.</li>
+</ul>
+<p>2.4 Mecánicas</p>
+<ul>
+    <li>Los jugadores pierden una vida al ser impactados por una bala.</li>
+    <li>El juego termina cuando un jugador pierde todas sus vidas.</li>
+    <li>Los obstáculos bloquean el movimiento y los disparos.</li>
+</ul>
+<h2 id="3-requisitos-no-funcionales">3. Requisitos No Funcionales</h2>
+<p>3.1 Rendimiento</p>
+<ul>
+    <li>El juego debe mantener una tasa de 60 FPS en navegadores modernos.</li>
+</ul>
+<p>3.2 Compatibilidad</p>
+<ul>
+    <li>Funcionar en los principales navegadores (Chrome, Firefox, Safari, Edge).</li>
+</ul>
+<p>3.3 Interfaz</p>
+<ul>
+    <li>Diseño minimalista y claro, mostrando vidas y balas restantes para cada jugador.</li>
+</ul>
+<h2 id="4-diagramas-uml">4. Diagramas UML</h2>
+<h3 id="4-1-diagrama-de-casos-de-uso">4.1 Diagrama de Casos de Uso</h3>
+<pre><code class="lang-mermaid">graph TD
+    A[Jugador] --&gt;|<span class="hljs-type">Inicia</span>| <span class="hljs-type">B</span>(Jugar Partida)
+    A --&gt;|<span class="hljs-type">Controla</span>| <span class="hljs-type">C</span>(Mover Personaje)
+    A --&gt;|<span class="hljs-type">Controla</span>| <span class="hljs-type">D</span>(Girar Personaje)
+    A --&gt;|<span class="hljs-type">Realiza</span>| <span class="hljs-type">E</span>(Disparar)
+    A --&gt;|<span class="hljs-type">Recolecta</span>| <span class="hljs-type">F</span>(Obtener Recursos)
+    A --&gt;|<span class="hljs-type">Gana</span>/Pierde| <span class="hljs-type">G</span>(Finalizar Partida)
+</code></pre>
+<h3 id="4-2-diagrama-de-clases">4.2 Diagrama de Clases</h3>
+<pre><code class="lang-mermaid"><span class="hljs-selector-tag">classDiagram</span>
+    <span class="hljs-selector-tag">class</span> <span class="hljs-selector-tag">Game</span> {
+        <span class="hljs-attribute">-canvas</span>: HTMLCanvasElement
+        -ctx: CanvasRenderingContext2D
+        -players: Player[]
+        -obstacles: Obstacle[]
+        -resources: Resource[]
+        +<span class="hljs-built_in">start</span>()
+        +<span class="hljs-built_in">update</span>()
+        +<span class="hljs-built_in">render</span>()
+    }
+    <span class="hljs-selector-tag">class</span> <span class="hljs-selector-tag">Player</span> {
+        <span class="hljs-attribute">-x</span>: number
+        -y: number
+        -angle: number
+        -lives: number
+        -bullets: number
+        +<span class="hljs-built_in">move</span>()
+        +<span class="hljs-built_in">rotate</span>()
+        +<span class="hljs-built_in">shoot</span>()
+        +<span class="hljs-built_in">collectResource</span>()
+    }
+    <span class="hljs-selector-tag">class</span> <span class="hljs-selector-tag">Obstacle</span> {
+        <span class="hljs-attribute">-x</span>: number
+        -y: number
+        -width: number
+        -height: number
+    }
+    <span class="hljs-selector-tag">class</span> <span class="hljs-selector-tag">Resource</span> {
+        <span class="hljs-attribute">-x</span>: number
+        -y: number
+        -type: string
+    }
+    <span class="hljs-selector-tag">Game</span> "1" <span class="hljs-selector-tag">--</span>&gt; "*" <span class="hljs-selector-tag">Player</span>
+    <span class="hljs-selector-tag">Game</span> "1" <span class="hljs-selector-tag">--</span>&gt; "*" <span class="hljs-selector-tag">Obstacle</span>
+    <span class="hljs-selector-tag">Game</span> "1" <span class="hljs-selector-tag">--</span>&gt; "*" <span class="hljs-selector-tag">Resource</span>
+</code></pre>
+<h3 id="4-3-diagrama-de-paquetes">4.3 Diagrama de Paquetes</h3>
+<pre><code class="lang-mermaid">graph TD
+    A<span class="hljs-string">[Game Logic]</span> --&gt; B<span class="hljs-string">[Rendering]</span>
+    A --&gt; C<span class="hljs-string">[Input Handling]</span>
+    A --&gt; D<span class="hljs-string">[Collision Detection]</span>
+    B --&gt; E<span class="hljs-string">[Canvas API]</span>
+    C --&gt; F<span class="hljs-string">[Keyboard Events]</span>
+</code></pre>
+<h3 id="4-4-diagrama-de-componentes">4.4 Diagrama de Componentes</h3>
+<pre><code class="lang-mermaid">graph TD
+    A<span class="hljs-string">[Game Engine]</span> --&gt; B<span class="hljs-string">[Player Manager]</span>
+    A --&gt; C<span class="hljs-string">[Obstacle Manager]</span>
+    A --&gt; D<span class="hljs-string">[Resource Manager]</span>
+    A --&gt; E<span class="hljs-string">[Collision System]</span>
+    A --&gt; F<span class="hljs-string">[Rendering System]</span>
+    A --&gt; G<span class="hljs-string">[Input System]</span>
+</code></pre>
+<h3 id="4-5-diagrama-de-despliegue">4.5 Diagrama de Despliegue</h3>
+<pre><code class="lang-mermaid">graph TD
+    A[Cliente Web] --&gt;|<span class="hljs-type">HTTP</span>/HTTPS| <span class="hljs-type">B</span>[Servidor Web]
+    B --&gt; C[Archivos Estáticos]
+    C --&gt; D[index.html]
+    C --&gt; E[game.js]
+    C --&gt; F[styles.css]
+</code></pre>
+<h3 id="4-6-diagrama-de-estado-para-un-jugador-">4.6 Diagrama de Estado (para un Jugador)</h3>
+<pre><code class="lang-mermaid">stateDiagram-v2
+    [*] --&gt; Idle
+    I<span class="hljs-function"><span class="hljs-title">dle</span> --&gt;</span> Moving: Tecla de movimiento presionada
+    M<span class="hljs-function"><span class="hljs-title">oving</span> --&gt;</span> Idle: Tecla de movimiento liberada
+    I<span class="hljs-function"><span class="hljs-title">dle</span> --&gt;</span> Shooting: Tecla de disparo presionada
+    S<span class="hljs-function"><span class="hljs-title">hooting</span> --&gt;</span> Idle: Animación de disparo completa
+    I<span class="hljs-function"><span class="hljs-title">dle</span> --&gt;</span> Rotating: Tecla de rotación presionada
+    R<span class="hljs-function"><span class="hljs-title">otating</span> --&gt;</span> Idle: Tecla de rotación liberada
+    I<span class="hljs-function"><span class="hljs-title">dle</span> --&gt;</span> Dead: Vidas = <span class="hljs-number">0</span>
+    D<span class="hljs-function"><span class="hljs-title">ead</span> --&gt;</span> [*]
+</code></pre>
+<h3 id="4-7-diagrama-de-secuencia-para-un-turno-de-juego-">4.7 Diagrama de Secuencia (para un turno de juego)</h3>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant J as Jugador
+    participant G as Game
+    participant P as Player
+    participant C as CollisionSystem
+    participant R as RenderingSystem
+
+    J-<span class="hljs-meta">&gt;&gt;</span><span class="hljs-symbol">G:</span> Presiona tecla
+    G-<span class="hljs-meta">&gt;&gt;</span><span class="hljs-symbol">P:</span> Actualiza posición/rotación
+    G-<span class="hljs-meta">&gt;&gt;</span><span class="hljs-symbol">C:</span> Verifica colisiones
+    C--<span class="hljs-meta">&gt;&gt;</span><span class="hljs-symbol">G:</span> Resultado de colisiones
+    G-<span class="hljs-meta">&gt;&gt;</span><span class="hljs-symbol">P:</span> Actualiza estado (si es necesario)
+    G-<span class="hljs-meta">&gt;&gt;</span><span class="hljs-symbol">R:</span> Renderiza nueva frame
+    R--<span class="hljs-meta">&gt;&gt;</span><span class="hljs-symbol">J:</span> Muestra actualización en pantalla
+</code></pre>
+<h3 id="4-8-diagrama-de-colaboraci-n-o-comunicaci-n-">4.8 Diagrama de Colaboración (o Comunicación)</h3>
+<pre><code class="lang-mermaid">graph TD
+    A[Game] --&gt;|<span class="hljs-type">1</span>: update| <span class="hljs-type">B</span>[Player <span class="hljs-number">1</span>]
+    A --&gt;|<span class="hljs-type">2</span>: update| <span class="hljs-type">C</span>[Player <span class="hljs-number">2</span>]
+    A --&gt;|<span class="hljs-type">3</span>: checkCollisions| <span class="hljs-type">D</span>[CollisionSystem]
+    A --&gt;|<span class="hljs-type">4</span>: updateResources| <span class="hljs-type">E</span>[ResourceManager]
+    A --&gt;|<span class="hljs-type">5</span>: render| <span class="hljs-type">F</span>[RenderingSystem]
+    B --&gt;|<span class="hljs-type">1</span><span class="hljs-number">.1</span>: <span class="hljs-built_in">move</span>| <span class="hljs-type">B</span>
+    B --&gt;|<span class="hljs-type">1</span><span class="hljs-number">.2</span>: rotate| <span class="hljs-type">B</span>
+    B --&gt;|<span class="hljs-type">1</span><span class="hljs-number">.3</span>: shoot| <span class="hljs-type">B</span>
+    C --&gt;|<span class="hljs-type">2</span><span class="hljs-number">.1</span>: <span class="hljs-built_in">move</span>| <span class="hljs-type">C</span>
+    C --&gt;|<span class="hljs-type">2</span><span class="hljs-number">.2</span>: rotate| <span class="hljs-type">C</span>
+    C --&gt;|<span class="hljs-type">2</span><span class="hljs-number">.3</span>: shoot| <span class="hljs-type">C</span>
+</code></pre>
+<h3 id="4-9-diagrama-de-actividades-para-un-ciclo-de-juego-">4.9 Diagrama de Actividades (para un ciclo de juego)</h3>
+<pre><code class="lang-mermaid">graph TD
+    A[Inicio del Frame] --&gt; B{Procesar Input}
+    B --&gt; |<span class="hljs-type">Jugador</span> <span class="hljs-number">1</span>| <span class="hljs-type">C</span>[Actualizar Jugador <span class="hljs-number">1</span>]
+    B --&gt; |<span class="hljs-type">Jugador</span> <span class="hljs-number">2</span>| <span class="hljs-type">D</span>[Actualizar Jugador <span class="hljs-number">2</span>]
+    C --&gt; E[Verificar Colisiones]
+    D --&gt; E
+    E --&gt; F[Actualizar Recursos]
+    F --&gt; G[Renderizar Frame]
+    G --&gt; H{¿Fin del Juego?}
+    H --&gt;|<span class="hljs-type">No</span>| <span class="hljs-type">A</span>
+    H --&gt;|<span class="hljs-type">S</span>í| <span class="hljs-type">I</span>[Terminar Juego]
+</code></pre>
+<h3 id="4-10-diagrama-de-objetos-estado-del-juego-en-un-momento-dado-">4.10 Diagrama de Objetos (Estado del juego en un momento dado)</h3>
+<pre><code class="lang-mermaid">graph TD
+    A[Game] --&gt; B[Player <span class="hljs-number">1</span>]
+    A --&gt; C[Player <span class="hljs-number">2</span>]
+    A --&gt; D[Obstacle <span class="hljs-number">1</span>]
+    A --&gt; E[Obstacle <span class="hljs-number">2</span>]
+    A --&gt; F[<span class="hljs-string">Resource:</span> Vida]
+    A --&gt; G[<span class="hljs-string">Resource:</span> Bala]
+    B --&gt;|<span class="hljs-string">x:</span> <span class="hljs-number">100</span>, <span class="hljs-string">y:</span> <span class="hljs-number">200</span>, <span class="hljs-string">angle:</span> <span class="hljs-number">45</span>, <span class="hljs-string">lives:</span> <span class="hljs-number">2</span>, <span class="hljs-string">bullets:</span> <span class="hljs-number">3</span>| B
+    C --&gt;|<span class="hljs-string">x:</span> <span class="hljs-number">500</span>, <span class="hljs-string">y:</span> <span class="hljs-number">300</span>, <span class="hljs-string">angle:</span> <span class="hljs-number">180</span>, <span class="hljs-string">lives:</span> <span class="hljs-number">3</span>, <span class="hljs-string">bullets:</span> <span class="hljs-number">1</span>| C
+    D --&gt;|<span class="hljs-string">x:</span> <span class="hljs-number">250</span>, <span class="hljs-string">y:</span> <span class="hljs-number">250</span>, <span class="hljs-string">width:</span> <span class="hljs-number">50</span>, <span class="hljs-string">height:</span> <span class="hljs-number">50</span>| D
+    E --&gt;|<span class="hljs-string">x:</span> <span class="hljs-number">400</span>, <span class="hljs-string">y:</span> <span class="hljs-number">150</span>, <span class="hljs-string">width:</span> <span class="hljs-number">30</span>, <span class="hljs-string">height:</span> <span class="hljs-number">80</span>| E
+    F --&gt;|<span class="hljs-string">x:</span> <span class="hljs-number">300</span>, <span class="hljs-string">y:</span> <span class="hljs-number">400</span>, <span class="hljs-string">type:</span> <span class="hljs-string">'life'</span>| F
+    G --&gt;|<span class="hljs-string">x:</span> <span class="hljs-number">150</span>, <span class="hljs-string">y:</span> <span class="hljs-number">350</span>, <span class="hljs-string">type:</span> <span class="hljs-string">'bullet'</span>| G
+</code></pre>
+<h2 id="5-conclusi-n">5. Conclusión</h2>
+<p>Esta especificación proporciona una visión general del juego de duelo 2D y sus componentes principales. Los diagramas UML ofrecen una representación visual de la estructura y el comportamiento del sistema, facilitando su implementación y mantenimiento.</p>
